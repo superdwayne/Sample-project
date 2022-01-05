@@ -3,9 +3,27 @@ import { VRCanvas, DefaultXRControllers, RayGrab } from '@react-three/xr'
 import './App.css';
 
 
-
-
 const FakeSphere = () => {
+
+   useEffect(() => {
+    return () => {
+      console.log("cleaned up");
+    };
+  }, []);
+
+
+  return (
+    <group>
+      <mesh scale={[4, 4, 4]} position={[0, 0.5, 0]} >
+        <sphereBufferGeometry args={[0.7, 30, 30]} attach="geometry" />
+        <meshStandardMaterial attach="material" transparent={true} wireframe={true} color={"#000"} />
+      </mesh>
+      
+    </group>
+  );
+}
+
+const Video = () => {
   const [playing, setPlaying] = useState(false);
 
   const [video] = useState(() => {
@@ -50,6 +68,7 @@ const FakeSphere = () => {
         <sphereBufferGeometry args={[0.7, 30, 30]} attach="geometry" />
         <meshStandardMaterial attach="material" transparent={true} wireframe={true} color={"#000"} />
       </mesh>
+      
       <mesh ref={myMesh} position={[0.7, 0.7, 0.7]} scale={[2, 2, 2]} onPointerEnter={(e) => setPlaying(true)} onPointerLeave={(e) => setPlaying(false)}>
 
         <boxBufferGeometry />
@@ -71,8 +90,9 @@ const FakeSphere = () => {
         <ambientLight />
         <spotLight intensity={10}  />
         <pointLight position={[10, 10, 10]} />
+        <FakeSphere />
         <RayGrab>
-          <FakeSphere />
+          <Video />
         </RayGrab>
     
        
