@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
+import { VRCanvas } from '@react-three/xr'
 import './App.css';
 
 
@@ -18,12 +19,12 @@ function Box(props) {
     <>
     <div className="App">
 
-      <Canvas style={{backgroundColor: "#ffffff" , display: "block" , height: "100vh", width: "100vw"}}>
+      <VRCanvas style={{backgroundColor: "#ffffff" , display: "block" , height: "100vh", width: "100vw"}}>
         <ambientLight />
         <spotLight intensity={10}  />
         <pointLight position={[10, 10, 10]} />
         <Box />
-      </Canvas>
+      </VRCanvas>
 
     </div>
     </>
