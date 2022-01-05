@@ -105,15 +105,7 @@ const Video = () => {
   );
 }
 
-function Box2(props) {
-  const mesh = useRef();
-  return (
-     <mesh {...props} ref={mesh} position={[1,1,-1]} scale={[0.5,0.5,0.5]}>
-        <boxGeometry args={[3, 3, 3]}   />
-        <meshStandardMaterial wireframe={false}  color={"grey"}  />
-     </mesh>
-  );
-}
+
 
   export default function App() {
   return (
@@ -129,7 +121,6 @@ function Box2(props) {
         <FakeSphere />
         <RayGrab>
           <Video />
-          <Box2 />
         </RayGrab>
     
        
