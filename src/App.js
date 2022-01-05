@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { VRCanvas } from '@react-three/xr'
+import { VRCanvas, DefaultXRControllers } from '@react-three/xr'
 import './App.css';
 
 
@@ -20,6 +20,7 @@ function Box(props) {
     <div className="App">
 
       <VRCanvas style={{backgroundColor: "#ffffff" , display: "block" , height: "100vh", width: "100vw"}}>
+      <DefaultXRControllers />
         <ambientLight />
         <spotLight intensity={10}  />
         <pointLight position={[10, 10, 10]} />
