@@ -23,7 +23,7 @@ const FakeSphereControls = () => {
     <orbitControls
       ref={controls}
       args={[camera, domElement]}
-      enableZoom={true}
+      enableZoom={false}
       position={[1, 1, 1]}
       maxAzimuthAngle={Math.PI / 4}
       maxPolarAngle={Math.PI}
@@ -84,7 +84,7 @@ const Video = () => {
     };
   }, []);
 
-  const myMesh = React.useRef()
+  const myMesh = useRef()
   // useFrame(() => {// myMesh.current.rotation.y += 0.01})
 
 
@@ -102,6 +102,17 @@ const Video = () => {
     </group>
   );
 }
+
+function Box2(props) {
+  const mesh = useRef();
+  return (
+     <mesh {...props} ref={mesh} position={[1,1,-1]} scale={[0.5,0.5,0.5]}>
+        <boxGeometry args={[3, 3, 3]}   />
+        <meshStandardMaterial wireframe={false}  color={"grey"}  />
+     </mesh>
+  );
+}
+
   export default function App() {
   return (
     <>
@@ -116,6 +127,7 @@ const Video = () => {
         <FakeSphere />
         <RayGrab>
           <Video />
+          <Box2 />
         </RayGrab>
     
        
@@ -125,5 +137,8 @@ const Video = () => {
     </>
   );
 }
+
+
+
 
 
