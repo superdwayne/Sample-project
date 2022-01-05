@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { VRCanvas, DefaultXRControllers } from '@react-three/xr'
+import { VRCanvas, DefaultXRControllers, RayGrab } from '@react-three/xr'
 import './App.css';
 
 
@@ -14,6 +14,16 @@ function Box(props) {
      </mesh>
   );
 }
+
+function Box2(props) {
+  const mesh = useRef();
+  return (
+     <mesh {...props} ref={mesh} position={[1,1,1]} scale={[0.5,0.5,0.5]}>
+        <boxGeometry args={[3, 3, 3]}   />
+        <meshStandardMaterial wireframe={false}  color={"grey"}  />
+     </mesh>
+  );
+}
   export default function App() {
   return (
     <>
@@ -24,7 +34,11 @@ function Box(props) {
         <ambientLight />
         <spotLight intensity={10}  />
         <pointLight position={[10, 10, 10]} />
+        <RayGrab>
+          <Box2 />
+        </RayGrab>
         <Box />
+       
       </VRCanvas>
 
     </div>
