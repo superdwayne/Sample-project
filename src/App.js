@@ -1,34 +1,12 @@
-import React, { useRef, useEffect, useState } from "react";
-import { useFrame } from "@react-three/fiber";
+import React, {useEffect, useState } from "react";
 import { VRCanvas, DefaultXRControllers, RayGrab } from '@react-three/xr'
 import './App.css';
 
 
-function Box(props) {
-  const mesh = useRef();
-  useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += 0.01));
-  return (
-     <mesh {...props} ref={mesh}  scale={[1,1,1]}>
-        <boxGeometry args={[3, 3, 3]}   />
-        <meshStandardMaterial wireframe={true}  color={"black"}  />
-     </mesh>
-  );
-}
+
 
 const FakeSphere = () => {
   const [playing, setPlaying] = useState(false);
-  const [playing2, setPlaying2] = useState(false);
-
-  const [video2] = useState(() => {
-    const vid2 = document.createElement("video");
-    vid2.src = "https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/Playground/FARFETCH_1.mp4";
-    vid2.crossOrigin = "Anonymous";
-    vid2.loop = false;
-    vid2.autoplay = false;
-    vid2.playsInline = true;
-    vid2.controls = true;
-    return vid2;
-  });
 
   const [video] = useState(() => {
     const vid = document.createElement("video");
@@ -42,15 +20,7 @@ const FakeSphere = () => {
   });
 
 
-  useEffect(() => {
-    console.log("Inside Video 2");
-    if (playing2)
-      video2.play()
-    else
-      video2.pause()
-
-  }, [playing2, video2]);
-
+ 
   useEffect(() => {
 
 
