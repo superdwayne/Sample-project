@@ -1,8 +1,37 @@
-import React, {useEffect, useState } from "react";
+import React, {useRef, useEffect, useState } from "react";
 import { VRCanvas, DefaultXRControllers, RayGrab } from '@react-three/xr'
-
+import {
+  useFrame,
+  useThree,
+  extend
+} from '@react-three/fiber'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import './App.css';
 
+extend({ OrbitControls });
+
+
+const FakeSphereControls = () => {
+  const {
+    camera,
+    gl: { domElement },
+  } = useThree();
+  // Ref to the controls, so that we can update them on every frame using useFrame
+  const controls = useRef();
+  useFrame((state) => controls.current.update());
+  return (
+    <orbitControls
+      ref={controls}
+      args={[camera, domElement]}
+      enableZoom={true}
+      position={[1, 1, 1]}
+      maxAzimuthAngle={Math.PI / 4}
+      maxPolarAngle={Math.PI}
+      minAzimuthAngle={-Math.PI / 4}
+      minPolarAngle={0}
+    />
+  );
+};
 
 const FakeSphere = () => {
 
@@ -83,7 +112,7 @@ const Video = () => {
         <ambientLight />
         <spotLight intensity={10}  />
         <pointLight position={[10, 10, 10]} />
-
+        <FakeSphereControls />
         <FakeSphere />
         <RayGrab>
           <Video />
