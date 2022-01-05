@@ -91,7 +91,7 @@ const Video = () => {
   return (
     <group>
       
-      <mesh ref={myMesh} position={[0.7, 0.7, 0]} scale={[2, 2, 2]} onPointerEnter={(e) => setPlaying(true)} onPointerLeave={(e) => setPlaying(false)}>
+      <mesh ref={myMesh} position={[0.7, 0.7, 0]} scale={[1, 1, 1]} onPointerEnter={(e) => setPlaying(true)} onPointerLeave={(e) => setPlaying(false)}>
 
         <boxBufferGeometry />
         <meshBasicMaterial>
