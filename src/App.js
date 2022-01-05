@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, useState } from "react";
-import { VRCanvas, DefaultXRControllers, RayGrab } from '@react-three/xr'
+import { VRCanvas, DefaultXRControllers, RayGrab, useInteraction } from '@react-three/xr'
 import {
   useFrame,
   useThree,
@@ -67,6 +67,10 @@ const Video = () => {
     return vid;
   });
 
+  const myMesh = useRef()
+
+  useInteraction(myMesh, 'onSelect', () => video.play() )
+
   useEffect(() => {
     console.log("Inside Video 1");
     if (playing)
@@ -84,8 +88,6 @@ const Video = () => {
     };
   }, []);
 
-  const myMesh = useRef()
-  // useFrame(() => {// myMesh.current.rotation.y += 0.01})
 
 
   return (
