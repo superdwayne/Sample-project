@@ -1,5 +1,6 @@
 import React, {useEffect, useState } from "react";
 import { VRCanvas, DefaultXRControllers, RayGrab } from '@react-three/xr'
+
 import './App.css';
 
 
@@ -37,11 +38,7 @@ const Video = () => {
     return vid;
   });
 
-
- 
   useEffect(() => {
-
-
     console.log("Inside Video 1");
     if (playing)
       video.play()
@@ -64,12 +61,8 @@ const Video = () => {
 
   return (
     <group>
-      <mesh scale={[4, 4, 4]} position={[0, 0.5, 0]} >
-        <sphereBufferGeometry args={[0.7, 30, 30]} attach="geometry" />
-        <meshStandardMaterial attach="material" transparent={true} wireframe={true} color={"#000"} />
-      </mesh>
       
-      <mesh ref={myMesh} position={[0.7, 0.7, 0.7]} scale={[2, 2, 2]} onPointerEnter={(e) => setPlaying(true)} onPointerLeave={(e) => setPlaying(false)}>
+      <mesh ref={myMesh} position={[0.7, 0.7, 0]} scale={[2, 2, 2]} onPointerEnter={(e) => setPlaying(true)} onPointerLeave={(e) => setPlaying(false)}>
 
         <boxBufferGeometry />
         <meshBasicMaterial>
@@ -90,6 +83,7 @@ const Video = () => {
         <ambientLight />
         <spotLight intensity={10}  />
         <pointLight position={[10, 10, 10]} />
+
         <FakeSphere />
         <RayGrab>
           <Video />
