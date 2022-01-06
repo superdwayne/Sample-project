@@ -7,8 +7,6 @@ import { useGLTF } from '@react-three/drei'
 
 import { useXR, useXREvent } from '@react-three/xr'
 
-
-
 export default function Model({ ...props }) {
 
   const { player } = useXR()
