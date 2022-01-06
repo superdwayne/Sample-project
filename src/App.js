@@ -6,6 +6,7 @@ import {
   extend
 } from '@react-three/fiber'
 import DPM from './DPM/Dpm'
+import DPM2 from './DPM/Dpm_1'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import './App.css';
 
@@ -25,7 +26,7 @@ const FakeSphereControls = () => {
     <orbitControls
       ref={controls}
       args={[camera, domElement]}
-      enableZoom={false}
+      enableZoom={true}
       position={[1, 1, 1]}
       maxAzimuthAngle={Math.PI / 4}
       maxPolarAngle={Math.PI}
@@ -123,6 +124,7 @@ const Video = () => {
         <Suspense fallback={null}>
           <RayGrab>
             <DPM position={[-1, 0.5, 0]}  />
+            <DPM2 position={[ 1.4, 0.5, 0]} />
           </RayGrab>
       </Suspense>
 
