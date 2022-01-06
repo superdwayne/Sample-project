@@ -1,14 +1,16 @@
-import React, {useRef, useEffect, useState } from "react";
-import { VRCanvas, DefaultXRControllers, RayGrab, useInteraction } from '@react-three/xr'
+import React, {useRef, useEffect, useState, Suspense } from "react";
+import { VRCanvas, RayGrab, useInteraction , Hands } from '@react-three/xr'
 import {
   useFrame,
   useThree,
   extend
 } from '@react-three/fiber'
+import DPM from './DPM/Dpm'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import './App.css';
 
 extend({ OrbitControls });
+
 
 
 const FakeSphereControls = () => {
@@ -111,9 +113,13 @@ const Video = () => {
   return (
     <>
     <div className="App">
-
+   
       <VRCanvas style={{backgroundColor: "#ffffff" , display: "block" , height: "100vh", width: "100vw"}}>
-      <DefaultXRControllers />
+      <Hands />
+      <Suspense fallback={null}>
+        <DPM position={[-1, 0.5, 0]}  />
+    </Suspense>
+
         <ambientLight />
         <spotLight intensity={10}  />
         <pointLight position={[10, 10, 10]} />
