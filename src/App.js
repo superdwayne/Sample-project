@@ -115,13 +115,18 @@ const Video = () => {
     <div className="App">
    
       <VRCanvas style={{backgroundColor: "#ffffff" , display: "block" , height: "100vh", width: "100vw"}}>
-      <Hands />
-      <Suspense fallback={null}>
-        <DPM position={[-1, 0.5, 0]}  />
-    </Suspense>
-
-        <ambientLight />
+   
+     <ambientLight />
         <spotLight intensity={10}  />
+      <Hands />
+      
+        <Suspense fallback={null}>
+          <RayGrab>
+            <DPM position={[-1, 0.5, 0]}  />
+          </RayGrab>
+      </Suspense>
+
+        
         <pointLight position={[10, 10, 10]} />
         <FakeSphereControls />
         <FakeSphere />
