@@ -10,7 +10,7 @@ import { useXR, useXREvent, useXRFrame } from '@react-three/xr'
 export default function Model({ ...props }) {
 
   const { player } = useXR()
-
+ 
   console.log(player)
 
 useXREvent(
