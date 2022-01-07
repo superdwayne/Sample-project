@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 
-import { useXR, useXREvent, useXRFrame } from '@react-three/xr'
+import { useXR, useXREvent } from '@react-three/xr'
 
 export default function Model({ ...props }) {
 
@@ -9,7 +9,14 @@ export default function Model({ ...props }) {
  
   console.log(player)
 
-useXREvent(
+
+
+
+  const group = useRef()
+  const { nodes, materials, animations } = useGLTF('/dpm_move2.glb')
+  const { actions } = useAnimations(animations, group)
+
+  useXREvent(
     "squeeze",
     (e) => {
       console.log(e.controller.hand.rotation.x)
@@ -17,17 +24,19 @@ useXREvent(
     },
   )
 
-  useXRFrame((time, xrFrame) => {
-  console.log(xrFrame)
-  } , [])
+  useXREvent(
+    "select",
+    (e) => {
+      actions.MOVE.play()
+    },
+  )
 
 
-  const group = useRef()
-  const { nodes, materials, animations } = useGLTF('/dpm_move2.glb')
-  const { actions } = useAnimations(animations, group)
-  useEffect(() => {
-    actions.MOVE.play()
-  })
+  // useXRFrame((time, xrFrame) => {
+  //   actions.MOVE.play()
+  //   } , [])
+  
+  
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Armature001" position={[0.41, -0.05, 0.02]}>
