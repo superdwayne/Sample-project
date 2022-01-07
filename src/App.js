@@ -1,4 +1,4 @@
-import React, {useRef, useEffect,  Suspense } from "react";
+import React, {useRef, useEffect, Suspense } from "react";
 import { VRCanvas, RayGrab, Interactive , Hands } from '@react-three/xr'
 import {
   useFrame,
@@ -6,8 +6,8 @@ import {
   extend
 } from '@react-three/fiber'
 import DPM from './DPM/Dpm'
-import DPM2 from './DPM/Dpm_1'
 import DPMX from './DPM/DPM-X'
+import DPMZ from './DPM/DPMZ'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import './App.css';
 
@@ -28,10 +28,8 @@ const FakeSphereControls = () => {
       ref={controls}
       args={[camera, domElement]}
       enableZoom={true}
-      position={[1, 1, 1]}
-      maxAzimuthAngle={Math.PI / 4}
-      maxPolarAngle={Math.PI}
-      minAzimuthAngle={-Math.PI / 4}
+      position={[1, 2, 3]}
+    
       minPolarAngle={0}
     />
   );
@@ -109,37 +107,41 @@ const FakeSphere = () => {
 //   );
 // }
 
+  export default function App() {
 
-
-  export default function App() {    
+    
   return (
     <>
     <div className="App">
    
-      <VRCanvas style={{backgroundColor: "#ffffff" , display: "block" , height: "100vh", width: "100vw"}}>
-      <Interactive >
+      <VRCanvas camera={{ fov: 75, position: [-1, -1, 1]}} style={{backgroundColor: "#ffffff" , display: "block" , height: "100vh", width: "100vw"}}>
+ 
      <ambientLight />
-        <spotLight intensity={10}  />
+        <spotLight intensity={20}  />
       <Hands />
       
         <Suspense fallback={null}>
-          <RayGrab>
-              <DPM position={[-1, 0.5, 0]}  />
-            </RayGrab>
+        
+          <Interactive onSelect={() => console.log('clicked!')}>
+              <RayGrab>
+                  <DPM position={[-1, 0.5, 0]}  />
+              </RayGrab>
+              </Interactive>
+          
             <RayGrab>
-              <DPM2 position={[ 1.4, 0.5, 0]} />
+              <DPMZ position={[ 1.4, 0.5, 0]} />
             </RayGrab>
+           
             <RayGrab>
-              <DPMX position={[ 0, 0.5, -2]} />
+              <DPMX position={[ 0, 0.5, -1]} />
             </RayGrab>
           
       </Suspense>
 
         
         <pointLight position={[10, 10, 10]} />
-        <FakeSphereControls />
+         <FakeSphereControls />
         <FakeSphere />
-        </Interactive>
       </VRCanvas>
 
     </div>

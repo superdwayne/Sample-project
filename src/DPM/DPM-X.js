@@ -1,13 +1,26 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
+
+import { useXR, useXREvent } from '@react-three/xr'
 
 export default function Model({ ...props }) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('../DPM-X.glb')
   const { actions } = useAnimations(animations, group)
-  useEffect(() => {
-    actions.CHILL.play()
-  })
+
+  const { player } = useXR()
+console.log(player)
+  useXREvent(
+    "select",
+    (e) => {
+      player.position.x = 0;
+      player.position.y = 0.5;
+      player.position.z = -1;
+      actions.CHILL.play()
+    },
+  )
+
+ 
   return (
     <group ref={group} {...props} dispose={null}>
       <group position={[-1.68, 0.02, 0.07]}>
