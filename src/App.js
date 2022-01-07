@@ -114,7 +114,7 @@ const FakeSphere = () => {
     <>
     <div className="App">
    
-      <VRCanvas camera={{ fov: 75, position: [-1, -1, 1]}} style={{backgroundColor: "#ffffff" , display: "block" , height: "100vh", width: "100vw"}}>
+      <VRCanvas camera={{ fov: 75}} style={{backgroundColor: "#ffffff" , display: "block" , height: "100vh", width: "100vw"}}>
  
      <ambientLight />
         <spotLight intensity={20}  />
