@@ -8,10 +8,6 @@ export default function Model({ ...props }) {
   const { player } = useXR()
  
   console.log(player)
-
-
-
-
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('/dpm_move2.glb')
   const { actions } = useAnimations(animations, group)
