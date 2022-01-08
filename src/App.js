@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, Suspense } from "react";
-import { VRCanvas, RayGrab, Interactive , Hands } from '@react-three/xr'
+import { VRCanvas, RayGrab , Hands } from '@react-three/xr'
 import {
   useFrame,
   useThree,
@@ -109,7 +109,6 @@ const FakeSphere = () => {
 
   export default function App() {
 
-    
   return (
     <>
     <div className="App">
@@ -118,18 +117,16 @@ const FakeSphere = () => {
  
      <ambientLight />
         <spotLight intensity={20}  />
+        <pointLight position={[10, 10, 10]} />
       <Hands />
       
         <Suspense fallback={null}>
-        
-          <Interactive onSelect={() => console.log('clicked!')}>
-              <RayGrab>
-                  <DPM position={[-1, 0.5, 0]}  />
-              </RayGrab>
-              </Interactive>
-          
             <RayGrab>
-              <DPMZ position={[ 1.4, 0.5, 0]} />
+                <DPM rotation={[0,1.5,0]} position={[-1.8, 0.5, 0]}  />
+            </RayGrab>
+        
+            <RayGrab>
+              <DPMZ rotation={[0,-1.5,0]} position={[ 1.8, 0.5, 0]} />
             </RayGrab>
            
             <RayGrab>
@@ -139,7 +136,7 @@ const FakeSphere = () => {
       </Suspense>
 
         
-        <pointLight position={[10, 10, 10]} />
+       
          <FakeSphereControls />
         <FakeSphere />
       </VRCanvas>

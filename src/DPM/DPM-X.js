@@ -13,13 +13,9 @@ console.log(player)
   useXREvent(
     "select",
     (e) => {
-      player.position.x = 0;
-      player.position.y = 0.5;
-      player.position.z = -1;
       actions.CHILL.play()
     },
   )
-
  
   return (
     <group ref={group} {...props} dispose={null}>

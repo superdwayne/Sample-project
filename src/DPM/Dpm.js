@@ -35,7 +35,7 @@ export default function Model({ ...props }) {
   
   return (
     <group ref={group} {...props} dispose={null}>
-      <group name="Armature001" position={[0.41, -0.05, 0.02]}>
+      <group name="Armature001" >
         <primitive object={nodes.Hips} />
         <skinnedMesh
           geometry={nodes.Wolf3D_Body001.geometry}
