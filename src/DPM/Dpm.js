@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef,useEffect } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 
 import { useXR, useXREvent } from '@react-three/xr'
@@ -11,7 +11,14 @@ export default function Model({ ...props }) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('/dpm_move2.glb')
   const { actions } = useAnimations(animations, group)
+  useEffect(() => {
+   
+    group.current.scale.x = 3.3
+    group.current.scale.y = 3.3
+    group.current.scale.z = 3.3
+    console.log(group.current.scale.x)
 
+     }); 
   useXREvent(
     "squeeze",
     (e) => {
@@ -26,6 +33,8 @@ export default function Model({ ...props }) {
       actions.MOVE.play()
     },
   )
+
+  
 
 
   // useXRFrame((time, xrFrame) => {
