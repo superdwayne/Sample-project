@@ -1,183 +1,227 @@
-import React, {useRef, useEffect, Suspense, useState } from "react";
-import { VRCanvas, RayGrab , Hands,  } from '@react-three/xr'
-import { Html } from "@react-three/drei"
+import React, { useRef, useEffect, Suspense } from 'react'
+import { useGLTF, OrbitControls, PointerLockControls } from '@react-three/drei'
+import * as THREE from "three";
+import Grid from "./grid";
+import getMouseDegrees from './Hooks/utils';
 
-import {
-  useFrame,
-  useThree,
-  extend
-} from '@react-three/fiber'
-import DPM from './DPM/Dpm'
-import DPMX from './DPM/DPM-X'
-import DPMZ from './DPM/DPMZ'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import {Canvas, useFrame, useThree } from '@react-three/fiber'
+
 import './App.css';
 
-extend({ OrbitControls });
+
+function moveJoint(mouse, joint, degreeLimit = 40) {
+  let degrees = getMouseDegrees(mouse.x, mouse.y, degreeLimit)
+  joint.rotation.xD = THREE.MathUtils.lerp(joint.rotation.xD || 0, degrees.y, 0.1)
+  joint.rotation.yD = THREE.MathUtils.lerp(joint.rotation.yD || 0, degrees.x, 0.1)
+  joint.rotation.x = THREE.Math.degToRad(joint.rotation.xD)
+  joint.rotation.y = THREE.Math.degToRad(joint.rotation.yD)
+ 
+}
 
 
-const Focal = () => {
-  const focal = useRef()
-  useFrame(({ camera, gl }) => {
-    const cam = gl.xr.isPresenting ? gl.xr.getCamera(camera) : camera;
-    focal.current.add(cam);
+function Model({mouse, ...props }) {
+ 
+  const group = useRef()
+  const { nodes, materials } = useGLTF('https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/Metaverse/DPM-X-Move.glb')
+  console.log(nodes)
+  const { size } = useThree()
+  useFrame((state, delta) => {
+    
+   const mouse = { x: size.width / 2 + (state.mouse.x * size.width) / 2, y: size.height / 2 + (-state.mouse.y * size.height) / 2 }
+    
+    moveJoint(mouse, nodes.Head )
   })
-
-  
-  return (
-  <group>
-
-      <mesh ref={focal} scale={[10, 10, 30  ]} position={[0, 1, -450]} >
-        <boxBufferGeometry computeVertexNormals={200} args={[1, 0.5, 0.1]} attach="geometry" />
-        <meshStandardMaterial attach="material" transparent={true} wireframe={true} color={"#000"} />
-      </mesh>
-    </group>
-  )
-}
-
-
-const World = () => {
-  
-  return (
-  <group>
-
-      <mesh scale={[180, 180, 30  ]} position={[0, 1, -450]} >
-        <boxBufferGeometry computeVertexNormals={200} args={[1, 0.5, 30]} attach="geometry" />
-        <meshStandardMaterial attach="material" transparent={true} wireframe={true} color={"#000"} />
-      </mesh>
-    </group>
-  )
-}
-
-const Plane = () => {
-  return (
-    <group>
-
-      <mesh scale={[180, 180, 10]} position={[0, 0.5, 0]} >
-        <planeBufferGeometry computeVertexNormals={200} args={[1, 300, 3000]} attach="geometry" />
-        <meshStandardMaterial attach="material" transparent={true} wireframe={true} color={"#000"} />
-          <Html distanceFactor={10}>
-              <div class="content">
-                <h6>Dwayne</h6>
-              </div>
-          </Html>
-      </mesh>
-
-    </group>
-  );
-
-}
-
-const FakeSphereControls = () => {
-  const {
-    camera,
-    gl: { domElement },
-  } = useThree();
-  
-  // Ref to the controls, so that we can update them on every frame using useFrame
-
-  const controls = useRef();
-
-
-  // useEffect(() => {
-  //   window.onscroll = () => {
-  //     console.log('Distance' , controls.current.getDistance() )
-  //   console.log('Zoom speed', controls.current.zoomSpeed)
-  //   }
-  // })
-  
-  useFrame(() => {
-    console.log('Distance' , controls.current.getDistance() )
-    console.log('Zoom speed', controls.current.zoomSpeed)
-  }, )
-
-  useFrame((state) => controls.current.update());
-  
+ 
   return (
     <>
-
-      <orbitControls
-        ref={controls}
-        args={[camera, domElement]}
-        enableZoom={true}
-        position={[10, 4, 300]}
-        minPolarAngle={0}
-        enableRotate={true}
-        enablePan={false} 
-        zoomSpeed={0.5}
-        enableDamping={true}
-        
-      />
-    </>
-  );
-  
-};
-
-const FakeSphere = () => {
-
- 
-  
-   useEffect(() => {
-    return () => {
-      console.log("cleaned up");
-    };
-  }, []);
-
-
-  return (
-    <group>
-      <mesh scale={[4, 4, 4]} position={[0, 0.5, -40]} >
-        <sphereBufferGeometry args={[0.7, 30, 30]} attach="geometry" />
-        <meshStandardMaterial attach="material" transparent={true} wireframe={true} color={"#000"} />
-      </mesh>
+c
+<OrbitControls />
       
+<group scale={[4,4,4]} ref={group} {...props} dispose={null}>
+
+      <group position={[-1.68, 0.02, 0.07]}>
+        <group position={[0, 1.02, 0.01]} rotation={[0.03, 0, 0]}>
+          <group position={[0, 0.1, 0]} rotation={[-0.14, 0, 0]}>
+            <group position={[0, 0.13, 0]} rotation={[-0.06, 0, 0]}>
+              <group position={[0, 0.12, 0]} rotation={[0.09, 0, 0]}>
+                <group position={[0, 0.16, 0]} rotation={[0.41, 0, 0]}>
+                  <group position={[0, 0.12, 0]} rotation={[-0.33, 0, 0]} />
+                </group>
+                <group position={[0.05, 0.14, -0.01]} rotation={[1.56, -0.04, -1.58]}>
+                  <group position={[0, 0.12, 0]} rotation={[1, 0.02, -0.14]}>
+                    <group position={[0, 0.29, 0]} rotation={[-0.11, 0.02, 0.45]}>
+                      <group position={[0, 0.25, 0]} rotation={[0.09, 0.08, -0.04]}>
+                        <group position={[-0.03, 0.03, 0.01]} rotation={[0.32, 0.12, 0.85]}>
+                          <group position={[0, 0.04, 0]} rotation={[0.06, -0.17, -0.5]}>
+                            <group position={[0, 0.03, 0]} rotation={[0.02, -0.05, -0.17]} />
+                          </group>
+                        </group>
+                        <group position={[-0.04, 0.1, -0.01]} rotation={[0.19, -0.09, 0.15]}>
+                          <group position={[0, 0.04, 0]} rotation={[0.19, -0.01, 0.05]}>
+                            <group position={[0, 0.03, 0]} rotation={[0.17, -0.15, -0.03]} />
+                          </group>
+                        </group>
+                        <group position={[-0.01, 0.1, 0]} rotation={[0.08, -0.13, 0.04]}>
+                          <group position={[0, 0.05, 0]} rotation={[0.26, -0.01, 0.09]}>
+                            <group position={[0, 0.04, 0]} rotation={[0.4, -0.06, -0.08]} />
+                          </group>
+                        </group>
+                        <group position={[0.02, 0.1, 0]} rotation={[0.12, -0.12, -0.11]}>
+                          <group position={[0, 0.04, 0]} rotation={[0.38, -0.01, 0.1]}>
+                            <group position={[0, 0.04, 0]} rotation={[0.08, -0.01, 0]} />
+                          </group>
+                        </group>
+                        <group position={[0.04, 0.09, 0.01]} rotation={[0.18, -0.17, -0.3]}>
+                          <group position={[0, 0.03, 0]} rotation={[0.29, -0.4, 0.18]}>
+                            <group position={[0, 0.02, 0]} rotation={[0.25, -0.02, 0.03]} />
+                          </group>
+                        </group>
+                      </group>
+                    </group>
+                  </group>
+                </group>
+                <group position={[-0.05, 0.14, -0.01]} rotation={[1.56, 0.04, 1.58]}>
+                  <group position={[0, 0.12, 0]} rotation={[1, -0.02, 0.14]}>
+                    <group position={[0, 0.29, 0]} rotation={[-0.11, -0.02, -0.45]}>
+                      <group position={[0, 0.25, 0]} rotation={[0.09, -0.08, 0.04]}>
+                        <group position={[0.03, 0.03, 0.01]} rotation={[0.32, -0.12, -0.85]}>
+                          <group position={[0, 0.04, 0]} rotation={[0.06, 0.17, 0.5]}>
+                            <group position={[0, 0.03, 0]} rotation={[0.02, 0.05, 0.17]} />
+                          </group>
+                        </group>
+                        <group position={[0.04, 0.1, -0.01]} rotation={[0.19, 0.09, -0.15]}>
+                          <group position={[0, 0.04, 0]} rotation={[0.19, 0.01, -0.05]}>
+                            <group position={[0, 0.03, 0]} rotation={[0.17, 0.15, 0.03]} />
+                          </group>
+                        </group>
+                        <group position={[0.01, 0.1, 0]} rotation={[0.08, 0.13, -0.04]}>
+                          <group position={[0, 0.05, 0]} rotation={[0.26, 0.01, -0.09]}>
+                            <group position={[0, 0.04, 0]} rotation={[0.4, 0.06, 0.08]} />
+                          </group>
+                        </group>
+                        <group position={[-0.02, 0.1, 0]} rotation={[0.12, 0.12, 0.11]}>
+                          <group position={[0, 0.04, 0]} rotation={[0.38, 0.01, -0.1]}>
+                            <group position={[0, 0.04, 0]} rotation={[0.08, 0.01, 0]} />
+                          </group>
+                        </group>
+                        <group position={[-0.04, 0.09, 0.01]} rotation={[0.18, 0.17, 0.3]}>
+                          <group position={[0, 0.03, 0]} rotation={[0.29, 0.4, -0.18]}>
+                            <group position={[0, 0.02, 0]} rotation={[0.25, 0.02, -0.03]} />
+                          </group>
+                        </group>
+                      </group>
+                    </group>
+                  </group>
+                </group>
+              </group>
+            </group>
+          </group>
+          <group position={[0.1, 0.01, 0]} rotation={[-0.02, 0, -3.08]}>
+            <group position={[0, 0.46, 0]} rotation={[-0.08, 0, -0.01]}>
+              <group position={[0, 0.44, 0]} rotation={[1.06, 0.03, -0.01]}>
+                <group position={[0, 0.15, 0]} rotation={[0.55, -0.07, 0.06]} />
+              </group>
+            </group>
+          </group>
+          <group position={[-0.1, 0.01, 0]} rotation={[-0.02, 0, 3.08]}>
+            <group position={[0, 0.46, 0]} rotation={[-0.08, 0, 0.01]}>
+              <group position={[0, 0.44, 0]} rotation={[1.06, -0.03, 0.01]}>
+                <group position={[0, 0.15, 0]} rotation={[0.55, 0.07, -0.06]} />
+              </group>
+            </group>
+          </group>
+        </group>
+      </group>
+      <primitive object={nodes["Hips"]}  />
+      {/* <primitive position={[-0,1.5,-0.1]}  object={nodes.Head}  /> */}
+      <skinnedMesh
+        geometry={nodes.Wolf3D_Facewear001.geometry}
+        material={materials.Wolf3D_Facewear}
+        skeleton={nodes.Wolf3D_Facewear001.skeleton}
+      />
+      <skinnedMesh
+        geometry={nodes.Wolf3D_Glasses001.geometry}
+        material={materials['Wolf3D_Glasses.002']}
+        skeleton={nodes.Wolf3D_Glasses001.skeleton}
+      />
+      <skinnedMesh
+        geometry={nodes.Wolf3D_Hair001.geometry}
+        material={materials.Wolf3D_Hair}
+        skeleton={nodes.Wolf3D_Hair001.skeleton}
+      />
+      <skinnedMesh
+        geometry={nodes.Wolf3D_Outfit_Bottom001.geometry}
+        material={materials.Wolf3D_Outfit_Bottom}
+        skeleton={nodes.Wolf3D_Outfit_Bottom001.skeleton}
+      />
+      <skinnedMesh
+        geometry={nodes.Wolf3D_Outfit_Footwear001.geometry}
+        material={materials.Wolf3D_Outfit_Footwear}
+        skeleton={nodes.Wolf3D_Outfit_Footwear001.skeleton}
+      />
+      <skinnedMesh
+        geometry={nodes.Wolf3D_Outfit_Top001.geometry}
+        material={materials.Wolf3D_Outfit_Top}
+        skeleton={nodes.Wolf3D_Outfit_Top001.skeleton}
+      />
+      <skinnedMesh
+        name="EyeLeft001"
+        geometry={nodes.EyeLeft001.geometry}
+        material={nodes.EyeLeft001.material}
+        skeleton={nodes.EyeLeft001.skeleton}
+        morphTargetDictionary={nodes.EyeLeft001.morphTargetDictionary}
+        morphTargetInfluences={nodes.EyeLeft001.morphTargetInfluences}
+      />
+      <skinnedMesh
+        name="EyeRight001"
+        geometry={nodes.EyeRight001.geometry}
+        material={nodes.EyeRight001.material}
+        skeleton={nodes.EyeRight001.skeleton}
+        morphTargetDictionary={nodes.EyeRight001.morphTargetDictionary}
+        morphTargetInfluences={nodes.EyeRight001.morphTargetInfluences}
+      />
+      <skinnedMesh
+        name="Wolf3D_Head001"
+        geometry={nodes.Wolf3D_Head001.geometry}
+        material={materials.Wolf3D_Skin}
+        skeleton={nodes.Wolf3D_Head001.skeleton}
+        morphTargetDictionary={nodes.Wolf3D_Head001.morphTargetDictionary}
+        morphTargetInfluences={nodes.Wolf3D_Head001.morphTargetInfluences}
+      />
+      <skinnedMesh
+        name="Wolf3D_Teeth001"
+        geometry={nodes.Wolf3D_Teeth001.geometry}
+        material={materials['Wolf3D_Teeth.002']}
+        skeleton={nodes.Wolf3D_Teeth001.skeleton}
+        morphTargetDictionary={nodes.Wolf3D_Teeth001.morphTargetDictionary}
+        morphTargetInfluences={nodes.Wolf3D_Teeth001.morphTargetInfluences}
+      />
     </group>
-  );
+    </>
+  )
 }
+useGLTF.preload('https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/Metaverse/DPM-X.glb')
 
 
   export default function App() {
-
+    const mouse = useRef({ x: 0, y: 0 })
   return (
-    <>
-    <div className="App">
 
-      <VRCanvas gl2={true} fov={150} camera={{ position: [0, 0, 2000], near: 0.1, far: 2000,  }} style={{backgroundColor: "#ffffff" , display: "block" , height: "100vh", width: "100vw"}}>
+      <Canvas 
+   style={{backgroundColor: "white" , display: "block" , height: "100vh", width: "100vw"}}>
         
-          <Focal />
-
-          <FakeSphereControls />
-            
-          <FakeSphere />
-
-          <Plane />
-          <World />
-
-        <ambientLight />
+          <ambientLight />
           
-            <pointLight position={[10, 10, 10]} />
-          <Hands />
-          
-            <Suspense fallback={null}>
-                <RayGrab>
-                    <DPM rotation={[0,0,0]} position={[-1.8, 0.5, -450]} />
-                </RayGrab>
-            
-                <RayGrab>
-                  <DPMZ rotation={[0,-3,0]} position={[ 1.8, 0.5, -36]} />
-                </RayGrab>
-              
-                <RayGrab>
-                  <DPMX position={[ 0, 0.5, -1]} />
-                </RayGrab>
+          <pointLight position={[10, 10, 10]} />
+         
+          <Suspense fallback={null} >
+           
+            <Model mouse={mouse} position={[ 0, -3.6, -4]} scale={[4, 4, 4]} />
               
           </Suspense>
 
-      </VRCanvas>
+      </Canvas>
 
-
-    </div>
-    </>
   );
 }
 
