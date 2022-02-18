@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, Suspense } from 'react'
-import { useGLTF, OrbitControls, PointerLockControls } from '@react-three/drei'
+import React, { useRef, Suspense } from 'react'
+import { useGLTF, OrbitControls,  } from '@react-three/drei'
 import * as THREE from "three";
-import Grid from "./grid";
+// import Grid from "./grid";
 import getMouseDegrees from './Hooks/utils';
 
 import {Canvas, useFrame, useThree } from '@react-three/fiber'
