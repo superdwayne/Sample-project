@@ -1,13 +1,16 @@
-import React, { useRef, Suspense } from 'react'
-import { useGLTF, OrbitControls,  } from '@react-three/drei'
+import React, { useRef, Suspense, useEffect, useState  } from 'react'
+import { useGLTF, OrbitControls, useAnimations,   } from '@react-three/drei'
 import * as THREE from "three";
 // import Grid from "./grid";
+import Brain from './Brain/Brain'
+
 import getMouseDegrees from './Hooks/utils';
 
 import {Canvas, useFrame, useThree } from '@react-three/fiber'
 
 import './App.css';
 
+let dis = 20
 
 function moveJoint(mouse, joint, degreeLimit = 40) {
   let degrees = getMouseDegrees(mouse.x, mouse.y, degreeLimit)
@@ -15,29 +18,73 @@ function moveJoint(mouse, joint, degreeLimit = 40) {
   joint.rotation.yD = THREE.MathUtils.lerp(joint.rotation.yD || 0, degrees.x, 0.1)
   joint.rotation.x = THREE.Math.degToRad(joint.rotation.xD)
   joint.rotation.y = THREE.Math.degToRad(joint.rotation.yD)
- 
 }
 
 
 function Model({mouse, ...props }) {
+
+const { camera, gl: { domElement } } = useThree();
+
+  useEffect(() => {
+
+    actions.CHILL.play()
+    group.current.position.x = 0;
+    group.current.position.y = -1.7;
+    group.current.position.z = 0;
+
+     });
  
   const group = useRef()
-  const { nodes, materials } = useGLTF('https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/Metaverse/DPM-X-Move.glb')
-  console.log(nodes)
+  const controls = useRef();
+
+  //const distance = controls.current.getDistance()
+
+  
+  const { nodes, materials, animations } = useGLTF('https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/Metaverse/DPM-X-Move.glb')
+  
+  const { actions } = useAnimations(animations, group)
+
+
   const { size } = useThree()
+
   useFrame((state, delta) => {
-    
+
+    // const distance = controls.current.getDistance();
+
+    //   if (distance > 2.75) {
+    //     console.log("Wide" + dis  )
+    //     dis = 20
+    //   } else {
+    //     console.log("Long" + dis)
+    //   }
+
+    //console.log('Distance' , controls.current.getDistance() )
+   // console.log('Zoom speed', controls.current.zoomSpeed)
+
+  console.log('Distance' , controls.current.getDistance() )
+    controls.current.update()
+
    const mouse = { x: size.width / 2 + (state.mouse.x * size.width) / 2, y: size.height / 2 + (-state.mouse.y * size.height) / 2 }
-    
     moveJoint(mouse, nodes.Head )
   })
  
   return (
     <>
-c
-<OrbitControls />
+
+<OrbitControls
+        ref={controls}
+        args={[camera, domElement]}
+        enableZoom={true}
+        position={[10, 4, 300]}
+        minPolarAngle={0}
+        enableRotate={true}
+        enablePan={false} 
+        zoomSpeed={0.5}
+        enableDamping={true}
+        
+      />
       
-<group scale={[4,4,4]} ref={group} {...props} dispose={null}>
+<group ref={group} {...props} dispose={null}>
 
       <group position={[-1.68, 0.02, 0.07]}>
         <group position={[0, 1.02, 0.01]} rotation={[0.03, 0, 0]}>
@@ -133,7 +180,6 @@ c
         </group>
       </group>
       <primitive object={nodes["Hips"]}  />
-      {/* <primitive position={[-0,1.5,-0.1]}  object={nodes.Head}  /> */}
       <skinnedMesh
         geometry={nodes.Wolf3D_Facewear001.geometry}
         material={materials.Wolf3D_Facewear}
@@ -200,27 +246,102 @@ c
     </>
   )
 }
-useGLTF.preload('https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/Metaverse/DPM-X.glb')
+useGLTF.preload('https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/Metaverse/DPM-X-Move.glb')
+
+
+const Video = () => {
+   const [playing, setPlaying] = useState(false);
+ 
+  const [video] = useState(() => {
+    const vid = document.createElement("video");
+    vid.src = "https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/Playground/FARFETCH.mp4";
+    vid.crossOrigin = "Anonymous";
+    vid.loop = false;
+    vid.autoplay = false;
+    vid.playsInline = true;
+    vid.controls = true;
+    return vid;
+  });
+  const myMesh = useRef()
+ 
+  useEffect(() => {
+    console.log("Inside Video 1");
+    if (playing)
+      video.play()
+    else
+      video.pause()
+  }, [video, playing]);
+  useEffect(() => {
+    return () => {
+      console.log("cleaned up");
+    };
+  }, []);
+  return (
+    <group>
+      
+      <mesh ref={myMesh}  position={[0, 0, 0.02]} scale={[0.06, 0.04, 0.09]} onPointerEnter={(e) => setPlaying(true)} onPointerLeave={(e) => setPlaying(false)}>
+        <planeBufferGeometry />
+        <meshBasicMaterial>
+          <videoTexture attach="map" args={[video]} />
+        </meshBasicMaterial>
+      </mesh>
+      
+    </group>
+  );
+}
+
+const FakeSphere = () => {
+
+  
+   useEffect(() => {
+    return () => {
+      console.log("cleaned up");
+    };
+  }, []);
+
+
+  return (
+    <group>
+      <mesh scale={[4, 4, 4]} position={[0, 0.5, -40]} >
+        <sphereBufferGeometry args={[0.7, 30, 30]} attach="geometry" />
+        <meshStandardMaterial attach="material" transparent={true} wireframe={true} color={"#000"} />
+      </mesh>
+      
+    </group>
+  );
+}
 
 
   export default function App() {
-    const mouse = useRef({ x: 0, y: 0 })
-  return (
 
-      <Canvas 
+ const mouse = useRef({ x: 0, y: 0 })
+  return (
+    
+    <>
+ 
+      <Canvas  camera={{ position: [0, 0, 2.75], fov: dis }}
+      pixelRatio={[1, 2]}
    style={{backgroundColor: "white" , display: "block" , height: "100vh", width: "100vw"}}>
-        
+        {/* <Grid />
+             */}
+            <FakeSphere />
+  
+    
           <ambientLight />
           
           <pointLight position={[10, 10, 10]} />
          
           <Suspense fallback={null} >
            
-            <Model mouse={mouse} position={[ 0, -3.6, -4]} scale={[4, 4, 4]} />
+          <Video/>
+            <Brain />
+            <Model mouse={mouse}  scale={[9,9,9]} />
               
           </Suspense>
 
       </Canvas>
+
+      </>
 
   );
 }
