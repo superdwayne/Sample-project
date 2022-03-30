@@ -1,5 +1,7 @@
 import React, { useRef, Suspense, useEffect, useState  } from 'react'
-import { useGLTF, OrbitControls, useAnimations,   } from '@react-three/drei'
+import { useGLTF, OrbitControls, useAnimations, Text, Billboard  } from '@react-three/drei'
+import { useCamera } from '@react-three/drei'
+
 import * as THREE from "three";
 // import Grid from "./grid";
 import Brain from './Brain/Brain'
@@ -7,6 +9,9 @@ import Brain from './Brain/Brain'
 import getMouseDegrees from './Hooks/utils';
 
 import {Canvas, useFrame, useThree } from '@react-three/fiber'
+
+
+import { ARCanvas } from '@react-three/xr'
 
 import './App.css';
 
@@ -19,7 +24,6 @@ function moveJoint(mouse, joint, degreeLimit = 40) {
   joint.rotation.x = THREE.Math.degToRad(joint.rotation.xD)
   joint.rotation.y = THREE.Math.degToRad(joint.rotation.yD)
 }
-
 
 function Model({mouse, ...props }) {
 
@@ -47,27 +51,41 @@ const { camera, gl: { domElement } } = useThree();
 
   const { size } = useThree()
 
+   
+// By setting the state outside the useFrame I am able to call it inside.
+  const [rotate, setRotate] = useState(true);
+  const [PolarAngle , setPolarAngle] = useState(2)
+
   useFrame((state, delta) => {
+   
+   const distance = controls.current.getDistance()
+   let Camera = state.camera.type
 
-    // const distance = controls.current.getDistance();
+  //console.log('Camera change' , Camera = 'OrthographicCamera' )
 
-    //   if (distance > 2.75) {
-    //     console.log("Wide" + dis  )
-    //     dis = 20
-    //   } else {
-    //     console.log("Long" + dis)
-    //   }
 
-    //console.log('Distance' , controls.current.getDistance() )
-   // console.log('Zoom speed', controls.current.zoomSpeed)
+  if (distance > 1 ) {
+    //console.log("Too far")
+    setRotate(true)
+    
+    
+  }else {
+  //  console.log("Too close")
+    setRotate(true)
+    setPolarAngle(3)
+    
+  }
 
-  console.log('Distance' , controls.current.getDistance() )
+
     controls.current.update()
 
    const mouse = { x: size.width / 2 + (state.mouse.x * size.width) / 2, y: size.height / 2 + (-state.mouse.y * size.height) / 2 }
     moveJoint(mouse, nodes.Head )
   })
- 
+
+  console.log(controls)
+  
+
   return (
     <>
 
@@ -76,11 +94,15 @@ const { camera, gl: { domElement } } = useThree();
         args={[camera, domElement]}
         enableZoom={true}
         position={[10, 4, 300]}
-        minPolarAngle={0}
-        enableRotate={true}
-        enablePan={false} 
+        maxPolarAngle={PolarAngle}
+        rotateSpeed={0.5}
+        maxDistance = {2}
+        enableRotate={rotate}
+        enablePan={true} 
         zoomSpeed={0.5}
         enableDamping={true}
+        snap={true}
+        maxZoom={5}
         
       />
       
@@ -251,10 +273,12 @@ useGLTF.preload('https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/
 
 const Video = () => {
    const [playing, setPlaying] = useState(false);
+   const { camera, gl: { domElement } } = useThree();
+   const controls = useRef();
  
   const [video] = useState(() => {
     const vid = document.createElement("video");
-    vid.src = "https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/Playground/FARFETCH.mp4";
+    vid.src = "https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/Playground/Fullreel.mp4";
     vid.crossOrigin = "Anonymous";
     vid.loop = false;
     vid.autoplay = false;
@@ -262,6 +286,11 @@ const Video = () => {
     vid.controls = true;
     return vid;
   });
+
+
+
+
+
   const myMesh = useRef()
  
   useEffect(() => {
@@ -276,17 +305,54 @@ const Video = () => {
       console.log("cleaned up");
     };
   }, []);
+
+  // useFrame(() => {
+  //   myMesh.current.rotation.y += 0.01;
+  // });
+
   return (
-    <group>
+
+    <>
+
+
+<Billboard
+  follow={true}
+  lockX={false}
+  lockY={false}
+  lockZ={false} // Lock the rotation on the z axis (default=false)
+>
+  <group>
       
-      <mesh ref={myMesh}  position={[0, 0, 0.02]} scale={[0.06, 0.04, 0.09]} onPointerEnter={(e) => setPlaying(true)} onPointerLeave={(e) => setPlaying(false)}>
+      <mesh ref={myMesh}  position={[0, -0.000, 0.02]} scale={[0.06, 0.04, 0.06]} onClick={(e) => setPlaying(true)} onPointerEnter={(e) => setPlaying(true)} onPointerLeave={(e) => setPlaying(false)}>
         <planeBufferGeometry />
         <meshBasicMaterial>
           <videoTexture attach="map" args={[video]} />
         </meshBasicMaterial>
       </mesh>
+
       
     </group>
+</Billboard>
+    
+
+    {/* <OrbitControls
+        ref={controls}
+        args={[camera, domElement]}
+        enableZoom={true}
+        position={[10, 4, 300]}
+
+        rotateSpeed={0.5}
+        maxDistance = {2}
+        enableRotate={true}
+        enablePan={true} 
+        zoomSpeed={0.5}
+        enableDamping={true}
+        snap={true}
+        maxZoom={5}
+        
+      /> */}
+
+    </>
   );
 }
 
@@ -305,7 +371,18 @@ const FakeSphere = () => {
       <mesh scale={[4, 4, 4]} position={[0, 0.5, -40]} >
         <sphereBufferGeometry args={[0.7, 30, 30]} attach="geometry" />
         <meshStandardMaterial attach="material" transparent={true} wireframe={true} color={"#000"} />
+      
+        <Text
+        scale={[2, 2, 2]}
+        color="black" // default
+        anchorX="right" // default
+        anchorY="middle" // default
+      >
+       Psst, this way  
+      </Text>
       </mesh>
+
+      
       
     </group>
   );
@@ -324,8 +401,11 @@ const FakeSphere = () => {
    style={{backgroundColor: "white" , display: "block" , height: "100vh", width: "100vw"}}>
         {/* <Grid />
              */}
-            <FakeSphere />
-  
+
+            
+
+            {/* <FakeSphere />
+   */}
     
           <ambientLight />
           
@@ -336,11 +416,9 @@ const FakeSphere = () => {
           <Video/>
             <Brain />
             <Model mouse={mouse}  scale={[9,9,9]} />
-              
           </Suspense>
 
       </Canvas>
-
       </>
 
   );

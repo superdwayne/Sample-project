@@ -2610,6 +2610,11 @@ adjust-sourcemap-loader@3.0.0:
     loader-utils "^2.0.0"
     regex-parser "^2.2.11"
 
+aframe-portals@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/aframe-portals/-/aframe-portals-1.0.0.tgz#1db13a0e068baf572dc8938b0938f964509d5daf"
+  integrity sha512-dirjE+1L8eJddMWrfOzfoGGG+57AfzrtrXBYS4bKWfA5P+HtIkCQ7OKKAN+Y9entLbeP8bOyjE9hRtWOM7GQ4g==
+
 aggregate-error@^3.0.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/aggregate-error/-/aggregate-error-3.1.0.tgz"
