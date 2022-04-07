@@ -6,6 +6,8 @@ import * as THREE from "three";
 // import Grid from "./grid";
 import Brain from './Brain/Brain'
 
+import DPMNIKE from './Nike/DPM-X-Nike'
+
 import getMouseDegrees from './Hooks/utils';
 
 import {Canvas, useFrame, useThree } from '@react-three/fiber'
@@ -96,7 +98,7 @@ const { camera, gl: { domElement } } = useThree();
         position={[10, 4, 300]}
         maxPolarAngle={PolarAngle}
         rotateSpeed={0.5}
-        maxDistance = {2}
+        maxDistance = {20}
         enableRotate={rotate}
         enablePan={true} 
         zoomSpeed={0.5}
@@ -389,6 +391,66 @@ const FakeSphere = () => {
 }
 
 
+ function DPMXGUCCI({ ...props }) {
+
+  useEffect(() => {
+
+    actions.DPMBOSS.play()
+
+     });
+     const { camera, gl: { domElement } } = useThree();
+  const group = useRef()
+
+  const controls = useRef();
+  const { nodes, materials, animations } = useGLTF('https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/Metaverse/DPMXoffwhite.glb')
+  const { actions } = useAnimations(animations, group)
+  return (
+
+<>
+
+<OrbitControls
+        ref={controls}
+        args={[camera, domElement]}
+        enableZoom={true}
+        position={[10, 4, 300]}
+  
+        rotateSpeed={0.5}
+        maxDistance = {20}
+        enableRotate={true}
+        enablePan={true} 
+        zoomSpeed={0.5}
+        enableDamping={true}
+        snap={true}
+        maxZoom={5}
+        
+      />
+
+    
+    <group ref={group} {...props} dispose={null}>
+      <group>
+        <group position={[-0.11, -0.90, -3.15]}>
+          <primitive object={nodes.Hips} />
+          <skinnedMesh geometry={nodes['FREE_|_Gucci_Backpack_-_Minecraft001'].geometry} material={materials.Element} skeleton={nodes['FREE_|_Gucci_Backpack_-_Minecraft001'].skeleton} />
+          <skinnedMesh geometry={nodes['OFF-WHITE_Monalisa_Black_T-Shirt001'].geometry} material={materials.male_casualsuit06} skeleton={nodes['OFF-WHITE_Monalisa_Black_T-Shirt001'].skeleton} />
+          <skinnedMesh geometry={nodes.Wolf3D_Body001.geometry} material={materials.Wolf3D_Body} skeleton={nodes.Wolf3D_Body001.skeleton} />
+          <skinnedMesh geometry={nodes.Wolf3D_Glasses001.geometry} material={materials.Wolf3D_Glasses} skeleton={nodes.Wolf3D_Glasses001.skeleton} />
+          <skinnedMesh geometry={nodes.Wolf3D_Hair001.geometry} material={materials.Wolf3D_Hair} skeleton={nodes.Wolf3D_Hair001.skeleton} />
+          <skinnedMesh geometry={nodes.Wolf3D_Outfit_Bottom001.geometry} material={materials.Wolf3D_Outfit_Bottom} skeleton={nodes.Wolf3D_Outfit_Bottom001.skeleton} />
+          <skinnedMesh geometry={nodes.Wolf3D_Outfit_Footwear001.geometry} material={materials.Wolf3D_Outfit_Footwear} skeleton={nodes.Wolf3D_Outfit_Footwear001.skeleton} />
+          <skinnedMesh name="EyeLeft001" geometry={nodes.EyeLeft001.geometry} material={materials['Wolf3D_Eye.001']} skeleton={nodes.EyeLeft001.skeleton} morphTargetDictionary={nodes.EyeLeft001.morphTargetDictionary} morphTargetInfluences={nodes.EyeLeft001.morphTargetInfluences} />
+          <skinnedMesh name="EyeRight001" geometry={nodes.EyeRight001.geometry} material={materials['Wolf3D_Eye.001']} skeleton={nodes.EyeRight001.skeleton} morphTargetDictionary={nodes.EyeRight001.morphTargetDictionary} morphTargetInfluences={nodes.EyeRight001.morphTargetInfluences} />
+          <skinnedMesh name="Wolf3D_Beard001" geometry={nodes.Wolf3D_Beard001.geometry} material={materials.Wolf3D_Beard} skeleton={nodes.Wolf3D_Beard001.skeleton} morphTargetDictionary={nodes.Wolf3D_Beard001.morphTargetDictionary} morphTargetInfluences={nodes.Wolf3D_Beard001.morphTargetInfluences} />
+          <skinnedMesh name="Wolf3D_Head001" geometry={nodes.Wolf3D_Head001.geometry} material={materials.Wolf3D_Skin} skeleton={nodes.Wolf3D_Head001.skeleton} morphTargetDictionary={nodes.Wolf3D_Head001.morphTargetDictionary} morphTargetInfluences={nodes.Wolf3D_Head001.morphTargetInfluences} />
+          <skinnedMesh name="Wolf3D_Teeth001" geometry={nodes.Wolf3D_Teeth001.geometry} material={materials['Wolf3D_Teeth.001']} skeleton={nodes.Wolf3D_Teeth001.skeleton} morphTargetDictionary={nodes.Wolf3D_Teeth001.morphTargetDictionary} morphTargetInfluences={nodes.Wolf3D_Teeth001.morphTargetInfluences} />
+        </group>
+      </group>
+    </group>
+
+    </>
+  )
+}
+
+
   export default function App() {
 
  const mouse = useRef({ x: 0, y: 0 })
@@ -396,7 +458,7 @@ const FakeSphere = () => {
     
     <>
  
-      <Canvas  camera={{ position: [0, 0, 2.75], fov: dis }}
+      <Canvas  camera={{ position: [0, 0, 2.75], fov: 50 }}
       pixelRatio={[1, 2]}
    style={{backgroundColor: "white" , display: "block" , height: "100vh", width: "100vw"}}>
         {/* <Grid />
@@ -404,8 +466,8 @@ const FakeSphere = () => {
 
             
 
-            {/* <FakeSphere />
-   */}
+           
+  
     
           <ambientLight />
           
@@ -413,9 +475,10 @@ const FakeSphere = () => {
          
           <Suspense fallback={null} >
            
-          <Video/>
-            <Brain />
-            <Model mouse={mouse}  scale={[9,9,9]} />
+          {/* <Video/> */}
+            {/* <Brain /> */}
+            {/* <Model mouse={mouse}  scale={[9,9,9]} /> */}
+             <DPMXGUCCI  scale={[1,1,1]}/>
           </Suspense>
 
       </Canvas>
