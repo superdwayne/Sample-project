@@ -163,7 +163,7 @@ const { camera, gl: { domElement } } = useThree();
         zoomSpeed={0.5}
         enableDamping={false}
         snap={true}
-        maxZoom={5}
+        maxZoom={4}
         
       />
       
@@ -243,11 +243,11 @@ const Video = () => {
 >
   <group>
       
-      <mesh ref={myMesh}  rotation={[0, 0, -1.58]} position={[0, 0, -0.06]} scale={[0.05, 0.04, 0.05]} onClick={(e) => setPlaying(true)} onPointerEnter={(e) => setPlaying(true)} onPointerLeave={(e) => setPlaying(false)}>
+      <mesh ref={myMesh}  rotation={[0, 0, -1.58]} position={[0, 0, -0.06]} scale={[0.05, 0.04, 0.05]} onClick={(e) => setPlaying(true)}  onHover ={(e) => setPlaying(true)} onMouseEnter={(e) => setPlaying(true)} onPointerLeave={(e) => setPlaying(false)}>
         <planeBufferGeometry />
         <meshBasicMaterial>
           <videoTexture attach="map" args={[video]} />
-        </meshBasicMaterial>
+        </meshBasicMaterial>  
       </mesh>
 
       
