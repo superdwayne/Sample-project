@@ -336,7 +336,7 @@ const FakeSphere = () => {
          
           <Suspense fallback={null} >
            
-          <Video/>
+          {/* <Video/> */}
             <Brain />
             <Model mouse={mouse}  scale={[2,2,2]} />
             
