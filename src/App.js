@@ -5,6 +5,7 @@ import { useCamera } from '@react-three/drei'
 import * as THREE from "three";
 import Grid from "./grid";
 import Brain from './Brain/Brain'
+import Creative from './Untitled'
 
 
 
@@ -14,11 +15,11 @@ import {Canvas, useFrame, useThree } from '@react-three/fiber'
 
 import UCO from './Uco3'
 
-import { ARCanvas } from '@react-three/xr'
+
 
 import './App.css';
 
-let dis = 20
+let dis = 100
 
 
 function DPM_WEB({ ...props }) {
@@ -357,123 +358,6 @@ const { camera, gl: { domElement } } = useThree();
 useGLTF.preload('/DPM-CT.gltf')
 
 
-const Video = () => {
-   const [playing, setPlaying] = useState(false);
-   const { camera, gl: { domElement } } = useThree();
-   const controls = useRef();
- 
-  const [video] = useState(() => {
-    const vid = document.createElement("video");
-    vid.src = "https://cdn-static.farfetch-contents.com/Content/UP/EXPERIENCE/Playground/CTM.mov";
-    vid.crossOrigin = "Anonymous";
-    vid.loop = false;
-    vid.autoplay = false;
-    vid.playsInline = true;
-    vid.controls = true;
-    return vid;
-  });
-
-
-
-
-
-  const myMesh = useRef()
- 
-  useEffect(() => {
-    console.log("Inside Video 1");
-    if (playing)
-      video.play()
-    else
-      video.pause()
-  }, [video, playing]);
-  useEffect(() => {
-    return () => {
-      console.log("cleaned up");
-    };
-  }, []);
-
-  // useFrame(() => {
-  //   myMesh.current.rotation.y += 0.01;
-  // });
-
-  return (
-
-    <>
-
-
-<Billboard
-  follow={true}
-  lockX={false}
-  lockY={false}
-  lockZ={false} // Lock the rotation on the z axis (default=false)
->
-  <group>
-      
-      <mesh ref={myMesh}  rotation={[0, 0, -1.58]} position={[0, 0, -0.06]} scale={[0.05, 0.04, 0.05]} onClick={(e) => setPlaying(true)}  onHover ={(e) => setPlaying(true)} onMouseEnter={(e) => setPlaying(true)} onPointerLeave={(e) => setPlaying(false)}>
-        <planeBufferGeometry />
-        <meshBasicMaterial>
-          <videoTexture attach="map" args={[video]} />
-        </meshBasicMaterial>  
-      </mesh>
-
-      
-    </group>
-</Billboard>
-    
-
-    {/* <OrbitControls
-        ref={controls}
-        args={[camera, domElement]}
-        enableZoom={true}
-        position={[10, 4, 300]}
-
-        rotateSpeed={0.5}
-        maxDistance = {2}
-        enableRotate={true}
-        enablePan={true} 
-        zoomSpeed={0.5}
-        enableDamping={true}
-        snap={true}
-        maxZoom={5}
-        
-      /> */}
-
-    </>
-  );
-}
-
-const FakeSphere = () => {
-
-  
-   useEffect(() => {
-    return () => {
-      console.log("cleaned up");
-    };
-  }, []);
-
-
-  return (
-    <group>
-      <mesh scale={[4, 4, 4]} position={[0, 0.5, -40]} >
-        <sphereBufferGeometry args={[0.7, 30, 30]} attach="geometry" />
-        <meshStandardMaterial attach="material" transparent={true} wireframe={true} color={"#000"} />
-      
-        <Text
-        scale={[2, 2, 2]}
-        color="black" // default
-        anchorX="right" // default
-        anchorY="middle" // default
-      >
-       Psst, this way  
-      </Text>
-      </mesh>
-
-      
-      
-    </group>
-  );
-}
-
 
 
 
@@ -488,8 +372,8 @@ const FakeSphere = () => {
       <Canvas  camera={{ position: [0, 0, 2.75], fov: dis }}
       pixelRatio={[1, 2]}
    style={{backgroundColor: "white" , display: "block" , height: "100vh", width: "100vw"}}>
-        {/* <Grid />
-             */}
+        {/* <Grid /> */}
+            
 
           {/* <ambientLight /> */}
           
@@ -497,12 +381,11 @@ const FakeSphere = () => {
          
           <Suspense fallback={null} >
            
-          {/* <Video/> */}
+          <Creative  scale={[0.8,0.8,0.8]}/>
             <Brain />
             {/* <Model mouse={mouse}  scale={[2,2,2]} /> */}
             <DPM_WEB mouse={mouse}  scale={[0.8,0.8,0.8]}  position={[-0.08,-4.2,-0]} rotation={[0,0.4,0]} />
-            {/* <UCO position={[0.9,-2.8,0.8]} scale={[2,2,2]} /> */}
-             {/* <DPMCT mouse={mouse} scale={[9,9,9]}/>  */}
+   
           </Suspense>
 
       </Canvas>
