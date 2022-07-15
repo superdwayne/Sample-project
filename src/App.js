@@ -1,6 +1,7 @@
 import React, { useRef, Suspense, useEffect, useState  } from 'react'
 import { useGLTF, OrbitControls, useAnimations, Text, Billboard  } from '@react-three/drei'
-import { useCamera } from '@react-three/drei'
+import Tooltip from "react-simple-tooltip"
+import { useProgress, Html } from "@react-three/drei"
 
 import * as THREE from "three";
 import Grid from "./grid";
@@ -358,7 +359,22 @@ const { camera, gl: { domElement } } = useThree();
 useGLTF.preload('/DPM-CT.gltf')
 
 
-
+function Loader() {
+  const { active, progress, errors, item, loaded, total } = useProgress()
+  console.log(progress + 'Progress loaded')
+  
+  return (
+    <>
+  
+  <Html>
+             
+      <Tooltip content="This experience is will challange what's possible and impossible! prepare yourself and your mouse">
+    <h1>{Math.ceil(progress)}% </h1>
+    </Tooltip>
+     </Html>
+  </>
+  )
+}
 
 
 
@@ -379,14 +395,16 @@ useGLTF.preload('/DPM-CT.gltf')
           
           <pointLight position={[0, 0, 10]} />
          
-          <Suspense fallback={null} >
-           
-          <Creative  scale={[0.8,0.8,0.8]}/>
+          <Suspense fallback={<Loader />} >
+          
+          <Creative scale={[0.8,0.8,0.8]}/>
             <Brain />
             {/* <Model mouse={mouse}  scale={[2,2,2]} /> */}
-            <DPM_WEB mouse={mouse}  scale={[0.8,0.8,0.8]}  position={[-0.08,-4.2,-0]} rotation={[0,0.4,0]} />
-   
+           
+              <DPM_WEB mouse={mouse}  scale={[0.8,0.8,0.8]}  position={[-0.08,-4.2,-0]} rotation={[0,0.4,0]} />
+          
           </Suspense>
+         
 
       </Canvas>
       </>
