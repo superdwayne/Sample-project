@@ -366,11 +366,13 @@ function Loader() {
   return (
     <>
   
-  <Html>
-             
-      <Tooltip content="This experience is will challange what's possible and impossible! prepare yourself and your mouse">
-    <h1>{Math.ceil(progress)}% </h1>
-    </Tooltip>
+  <Html fullscreen >
+
+   <section className='intro'>          
+      <h1>This experience is will challange what's possible and impossible! Prepare yourself and your mouse</h1>  
+      <h1>{Math.ceil(progress)}% </h1>
+     </section>
+ 
      </Html>
   </>
   )
